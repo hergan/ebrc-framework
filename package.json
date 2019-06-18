@@ -11,6 +11,7 @@
   "devDependencies": {
     "gulp": "^4.0.2",
     "gulp-sourcemaps": "^2.6.5",
+    "browser-sync": "^2.26.3",
     "gulp-sass": "^4.0.1",
     "gulp-postcss": "^8.0.0",
     "autoprefixer": "^9.5.0",
