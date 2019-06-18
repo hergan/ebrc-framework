@@ -1,0 +1,1 @@
+{"version":3,"sources":["base/_variables.scss"],"names":[],"mappings":"AACA,KACI,UAFiB","file":"style.css","sourcesContent":["$black:          #111;\nbody{\n    color: $black;\n}"]}
