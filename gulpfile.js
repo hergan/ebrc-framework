@@ -15,13 +15,8 @@ const browserSync = require('browser-sync').create();
 //  File Paths
 const files = {
     scssPath: 'app/scss/**/*.scss',
-    // css: 'dist/css',
+    indexPath: 'app/*.html',
     jsPath: 'app/js/**/*.js'
-}
-
-// A simple task to reload the page
-function reload() {
-    browserSync.reload();
 }
 
 // Init a bs server
@@ -29,13 +24,20 @@ function init(){
     browserSync.init({
         // You can tell browserSync to use this directory and serve it as a mini-server
         server: {
-            baseDir: "./"
+            baseDir: "dist",
+            index: "index.html" //todo: change for testing asp on ISS Server
         }
         // If you are already serving your website locally using something like apache
         // You can use the proxy setting to proxy that instead
         // proxy: "yourlocal.dev"
     })
 }
+// Sass task: compiles the styles.css into styles.css
+function indexTask() {
+    return src(files.indexPath)
+        .pipe(dest('dist/')) // put final index in dist folder
+        .pipe(browserSync.stream());
+    }
 
 // Sass task: compiles the styles.css into styles.css
 function scssTask() {
@@ -70,16 +72,11 @@ function cacheBustTask() {
         .pipe(dest('.'));
 }
 
-//
-function indexTask() {
-    watch("./*.html", reload);
-}
-
 // Watch Task: watch SCSS and JS files for changes
 // If any change, run scss  and js tasks simultaneously
 function watchTask() {
-    watch([files.scssPath, files.jsPath],
-        parallel(scssTask, jsTask, reload));
+    watch([files.scssPath, files.jsPath, files.indexPath],
+        parallel(indexTask, scssTask, jsTask));
 }
 
 
@@ -90,5 +87,5 @@ function watchTask() {
 exports.default = series(
     parallel(scssTask, jsTask),
     cacheBustTask,
-    parallel(init, watchTask, indexTask)
+    parallel(init, watchTask)
 );
